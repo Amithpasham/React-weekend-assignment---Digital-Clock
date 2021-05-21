@@ -1,95 +1,31 @@
-// import React, {Component, useState} from "react";
-// import '../styles/App.css';
+import React, { Component, useState } from "react";
+import "../styles/App.css";
 
-// class App extends Component {
-//     render() {
-
-//         return(
-//             <>
-               
-//             </>
-//         )
-//     }
-// }
-
-
-// export default App;
-import './App.css';
-import Cities from './Cities';
-import React from 'react';
-
-
-class App extends React.Component {
-
-  date;
-
-  constructor(){
+class App extends Component {
+  constructor() {
     super();
-    this.state = {
-      input:'',
-      update:'',
-      days:'',
-      hours:'',
-      mins:'',
-      secs:''
-    }
+    this.state = { 
+      time: new Date() 
+    };
   }
-
-  onSearchChange = (event) => {
-    this.setState({input:event.target.value})
+  currentTime() {
+    this.setState({ time: new Date() });
   }
-  onSubmit = () => {
-    this.date = this.state.input;
-    this.setState({update:this.date})
-    console.log(this.date);
-    // this.calculateTimer();
-    setInterval(this.calculateTimer, 1000);
+  componentDidMount() {
+    this.interval = setInterval(() => this.currentTime(), 1000);
   }
-
-  calculateTimer = () => {
-    let given = Date.parse(this.date);
-    let current = Date.parse(new Date());
-    // console.log(given);
-    // console.log(current);
-    let required = given - current;
-    // console.log(required);
-    if(required<0){
-      clearInterval(setInterval(this.calculateTimer, 1000));
-      this.setState({days:'00'});
-      this.setState({hours:'00'});
-      this.setState({mins:'00'});
-      this.setState({secs:'00'});
-    }else{
-      let days = Math.floor(required / (1000 * 60 * 60 * 24));
-      let hours = Math.floor((required % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      let minutes = Math.floor((required % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((required % (1000 * 60)) / 1000);
-      console.log(days);
-      console.log(hours);
-      console.log(minutes);
-      console.log(seconds);
-      this.setState({days:days});
-      this.setState({hours:hours});
-      this.setState({mins:minutes});
-      this.setState({secs:seconds});
-    }
-    
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
-componentWillUnmount(){
-  clearInterval(setInterval(this.calculateTimer, 1000));
-}
- 
-
-  render(){
+  render() {
     return (
-      <div className='Clock' >
-          <Cities searchChange={this.onSearchChange} Inputbox={this.onSubmit} date={this.state.update}
-          days={this.state.days} hours={this.state.hours} mins={this.state.mins} secs={this.state.secs}/>
-      </div>
-      
+      <>
+        <div className="Clock">
+          <h3 id="time">{this.state.time.toLocaleTimeString()}</h3>
+        </div>
+      </>
     );
   }
-  
 }
 
 export default App;
